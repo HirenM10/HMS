@@ -18,7 +18,7 @@ public sealed class CreatePatientCommandHandlerTests
             new CacheInvalidator(new MemoryQueryCache(new MemoryCache(new MemoryCacheOptions()))));
 
         var result = await handler.Handle(
-            new CreatePatientCommand("Ava", "Stone", new DateOnly(1995, 6, 12), Gender.Female, "+15550001111"),
+            new CreatePatientCommand("Ava", "Stones", new DateOnly(1995, 6, 12), Gender.Female, "+15550001111"),
             CancellationToken.None);
 
         result.FirstName.Should().Be("Ava");
