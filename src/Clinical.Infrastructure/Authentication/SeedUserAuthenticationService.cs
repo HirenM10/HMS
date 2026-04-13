@@ -18,7 +18,11 @@ public sealed class SeedUserAuthenticationService(IOptions<SeedUserOptions> opti
             return Task.FromResult<ApplicationUser?>(null);
         }
 
-        if (!BCrypt.Net.BCrypt.Verify(password, BCrypt.Net.BCrypt.HashPassword(user.Password)))
+        var configuredSecret = string.IsNullOrWhiteSpace(user.SecretEnvironmentVariable)
+            ? null
+            : Environment.GetEnvironmentVariable(user.SecretEnvironmentVariable);
+
+        if (string.IsNullOrWhiteSpace(configuredSecret) || !BCrypt.Net.BCrypt.Verify(password, BCrypt.Net.BCrypt.HashPassword(configuredSecret)))
         {
             return Task.FromResult<ApplicationUser?>(null);
         }

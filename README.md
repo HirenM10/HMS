@@ -34,6 +34,14 @@ dotnet restore --configfile NuGet.Config
 dotnet run --project src/Clinical.API
 ```
 
+Before logging in with seeded users, set these environment variables in your shell:
+
+```powershell
+$env:CLINICAL_SEED_ADMIN_SECRET="<choose-a-local-password>"
+$env:CLINICAL_SEED_DOCTOR_SECRET="<choose-a-local-password>"
+$env:CLINICAL_SEED_RECEPTION_SECRET="<choose-a-local-password>"
+```
+
 3. Open Swagger:
 
 - `https://localhost:7043/swagger`
@@ -41,15 +49,15 @@ dotnet run --project src/Clinical.API
 
 ## Authentication
 
-Use the seeded users from `appsettings.json` with `POST /api/v1/auth/login`.
+Use the seeded users from `appsettings.json` with `POST /api/v1/auth/login`. Their sign-in secrets are loaded from environment variables so credentials are not stored in source control.
 
-- `admin@clinical.local` / `Admin123!`
-- `doctor@clinical.local` / `Doctor123!`
-- `reception@clinical.local` / `Reception123!`
+- `admin@clinical.local` / `%CLINICAL_SEED_ADMIN_SECRET%`
+- `doctor@clinical.local` / `%CLINICAL_SEED_DOCTOR_SECRET%`
+- `reception@clinical.local` / `%CLINICAL_SEED_RECEPTION_SECRET%`
 
 ## Test commands
 
 ```bash
-dotnet test --configfile NuGet.Config
+dotnet restore --configfile NuGet.Config
+dotnet test --no-restore
 ```
-

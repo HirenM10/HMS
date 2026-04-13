@@ -12,6 +12,17 @@ namespace Clinical.IntegrationTests.Common;
 public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
     private readonly string _databasePath = Path.Combine(Path.GetTempPath(), $"clinical-tests-{Guid.NewGuid():N}.db");
+    private const string AdminSecretEnvironmentVariable = "CLINICAL_SEED_ADMIN_SECRET";
+    private const string DoctorSecretEnvironmentVariable = "CLINICAL_SEED_DOCTOR_SECRET";
+    private const string ReceptionSecretEnvironmentVariable = "CLINICAL_SEED_RECEPTION_SECRET";
+    public string AdminPassword { get; } = $"Admin!{Guid.NewGuid():N}";
+
+    public TestWebApplicationFactory()
+    {
+        Environment.SetEnvironmentVariable(AdminSecretEnvironmentVariable, AdminPassword);
+        Environment.SetEnvironmentVariable(DoctorSecretEnvironmentVariable, $"Doctor!{Guid.NewGuid():N}");
+        Environment.SetEnvironmentVariable(ReceptionSecretEnvironmentVariable, $"Reception!{Guid.NewGuid():N}");
+    }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -60,6 +71,13 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>
             catch (IOException)
             {
             }
+        }
+
+        if (disposing)
+        {
+            Environment.SetEnvironmentVariable(AdminSecretEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(DoctorSecretEnvironmentVariable, null);
+            Environment.SetEnvironmentVariable(ReceptionSecretEnvironmentVariable, null);
         }
     }
 }

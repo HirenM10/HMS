@@ -16,10 +16,12 @@ namespace Clinical.IntegrationTests.Controllers;
 public sealed class AuthAndClinicalFlowTests : IClassFixture<TestWebApplicationFactory>
 {
     private readonly HttpClient _client;
+    private readonly string _adminPassword;
 
     public AuthAndClinicalFlowTests(TestWebApplicationFactory factory)
     {
         _client = factory.CreateClient();
+        _adminPassword = factory.AdminPassword;
     }
 
     [Fact]
@@ -83,7 +85,7 @@ public sealed class AuthAndClinicalFlowTests : IClassFixture<TestWebApplicationF
 
     private async Task AuthenticateAsync()
     {
-        var login = await _client.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("admin@clinical.local", "Admin123!"));
+        var login = await _client.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("admin@clinical.local", _adminPassword));
         login.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var payload = await login.Content.ReadFromJsonAsync<LoginResponse>();
