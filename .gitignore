@@ -1,0 +1,32 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+TestResults/
+
+# Local .NET SDK and package caches
+.dotnet/
+.nuget/
+
+# IDE and user-specific files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs and runtime files
+*.log
+logs/
+
+# Coverage and diagnostics
+coverage/
+coverage.*
+*.coverage
+*.coveragexml
+
+# OS files
+Thumbs.db
+Desktop.ini
